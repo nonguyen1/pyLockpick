@@ -4,33 +4,53 @@
 # Date: Jul 24 2018
 
 import numpy as np
-from PIL import ImageGrab
 import cv2
-import time
-#from mss import mss
-from mss.darwin import MSS as mss
+#from mss.darwin import mss
+import mss
+import mss.tools
 import pyautogui
+import time
 
-def process_img(original_image):
-    processed_img = cv2.cvtColor(original_image, cv2.COLOR_RGB2GRAY)
-    processed_img = cv2.Canny(processed_img, threshold1=200, threshold2=300)
-    return processed_img
+#pyautogui.PAUSE = 1.5
+lock_image1 = 'lock_center1.png'
+lock_image2 = 'lock_center2.png'
+lock_image3 = 'lock_center3.png'
+
+timer = 0
+for _ in range(timer):
+    print(timer)
+    time.sleep(1)
+    timer -= 1
+
 
 last_time = time.time() 
-with mss() as sct:
+with mss.mss() as sct:
     while(True):
+        monitor = {'top': 0, 'left': 0, 'width': 350, 'height': 270}
+        screen = sct.grab(monitor)
+        mss.tools.to_png(screen.rgb, screen.size, output="test.png")
+        lock_coords = pyautogui.locate(lock_image1, "test.png")
+        if (not lock_coords):
+            lock_coords = pyautogui.locate(lock_image2, "test.png")
+            if (not lock_coords):
+                lock_coords = pyautogui.locate(lock_image3, "test.png")
 
-        monitor = {'top': 45, 'left': 0, 'width': 320, 'height': 240}
-        screen = np.array(sct.grab(monitor)) 
-        new_screen = process_img(screen)
+        if (lock_coords):
+            print(lock_coords[0], lock_coords[1])
+            pyautogui.click(x=lock_coords[0] / 2, y=lock_coords[1] / 2)
 
-        #cv2.imshow('window', screen)
-
-        cv2.imshow('window', new_screen)
-
+        print('screen size: ', screen.size)
         print('The loop took {} seconds'.format(time.time() - last_time))
         last_time = time.time()
 
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            cv2.destroyAllWindows()
-            break
+#        if cv2.waitKey(25) & 0xFF == ord('q'):
+#            cv2.destroyAllWindows()
+#            break
+
+
+# OpenCV fun process image.
+#def process_img(original_image):
+#    processed_img = cv2.cvtColor(original_image, cv2.COLOR_RGB2GRAY)
+#    processed_img = cv2.Canny(processed_img, threshold1=200, threshold2=300)
+#    return processed_img
+
