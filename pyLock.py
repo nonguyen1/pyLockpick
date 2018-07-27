@@ -12,17 +12,12 @@ import pyautogui
 import time
 
 #pyautogui.PAUSE = 1.5
-lock_image1 = 'lock_center1.png'
-lock_image2 = 'lock_center2.png'
-lock_image3 = 'lock_center3.png'
+lock_image1 = 'lock1.png'
+lock_image2 = 'lock2.png'
+lock_image3 = 'lock3.png'
+lock_image4 = 'lock4.png'
 
-timer = 0
-for _ in range(timer):
-    print(timer)
-    time.sleep(1)
-    timer -= 1
-
-
+picks = 100;
 last_time = time.time() 
 with mss.mss() as sct:
     while(True):
@@ -34,23 +29,9 @@ with mss.mss() as sct:
             lock_coords = pyautogui.locate(lock_image2, "test.png")
             if (not lock_coords):
                 lock_coords = pyautogui.locate(lock_image3, "test.png")
+                if (not lock_coords):
+                    lock_coords = pyautogui.locate(lock_image4, "test.png")
 
-        if (lock_coords):
-            print(lock_coords[0], lock_coords[1])
-            pyautogui.click(x=lock_coords[0] / 2, y=lock_coords[1] / 2)
-
-        print('screen size: ', screen.size)
-        print('The loop took {} seconds'.format(time.time() - last_time))
-        last_time = time.time()
-
-#        if cv2.waitKey(25) & 0xFF == ord('q'):
-#            cv2.destroyAllWindows()
-#            break
-
-
-# OpenCV fun process image.
-#def process_img(original_image):
-#    processed_img = cv2.cvtColor(original_image, cv2.COLOR_RGB2GRAY)
-#    processed_img = cv2.Canny(processed_img, threshold1=200, threshold2=300)
-#    return processed_img
-
+        if (lock_coords and picks):
+            #picks -= 1
+            pyautogui.click(x=lock_coords[0] / 2, y=lock_coords[1] / 2 + 5)
