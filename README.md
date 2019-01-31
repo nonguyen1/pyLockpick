@@ -3,7 +3,7 @@
 This is my solution for solving the lock pick problem created by HackMIT 2018
 puzzle#3.
 
-## The challenge goeas as follows: 
+## The challenge goes as as follows: 
 
 You'be been recruited to be trained to be the master lock picker. We present
 you the finest lockpicking training program, the Lockpick Simulator 3000.
